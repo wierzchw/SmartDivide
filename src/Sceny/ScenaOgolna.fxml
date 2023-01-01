@@ -7,8 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SceneController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Sceny.ScenaOgolnaController">
    <children>
       <SplitPane dividerPositions="0.6478696741854637" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -17,7 +16,7 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
                         <Button layoutX="229.0" layoutY="39.0" mnemonicParsing="false" onAction="#switchToScenaDokladna" text="Pokaz widok osob" />
-                        <Label layoutX="54.0" layoutY="43.0" text="Akturalny rachunek" />
+                        <Label fx:id="nazwaRachunku" layoutX="54.0" layoutY="43.0" text="Akturalny rachunek" />
                         <Button layoutX="353.0" layoutY="39.0" mnemonicParsing="false" text="Pokaz liste rachunkow" />
                      </children>
                   </AnchorPane>
