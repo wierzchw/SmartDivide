@@ -6,8 +6,9 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Sceny.ScenaOgolnaController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Sceny.ScenaOgolnaController">
    <children>
       <SplitPane dividerPositions="0.6478696741854637" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -15,9 +16,13 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
-                        <Button layoutX="229.0" layoutY="39.0" mnemonicParsing="false" onAction="#switchToScenaDokladna" text="Pokaz widok osob" />
-                        <Label fx:id="nazwaRachunku" layoutX="54.0" layoutY="43.0" text="Akturalny rachunek" />
-                        <Button layoutX="353.0" layoutY="39.0" mnemonicParsing="false" text="Pokaz liste rachunkow" />
+                        <Button layoutX="500.0" layoutY="40.0" mnemonicParsing="false" text="Pokaz widok osob" />
+                        <Label fx:id="billName" layoutX="40.0" layoutY="25.0" prefHeight="30.0" prefWidth="170.0" text="Akturalny rachunek">
+                           <font>
+                              <Font size="19.0" />
+                           </font></Label>
+                        <Button layoutX="40.0" layoutY="80.0" mnemonicParsing="false" onAction="#changeBillName" text="Zmień nazwę rachunku" />
+                        <TextField fx:id="changeBillNameField" layoutX="210.0" layoutY="80.0" />
                      </children>
                   </AnchorPane>
                   <SplitPane prefHeight="160.0" prefWidth="200.0">
@@ -26,14 +31,35 @@
                           <items>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
-                                    <ListView layoutX="61.0" layoutY="219.0" prefHeight="190.0" prefWidth="118.0" />
-                                    <Label layoutX="57.0" layoutY="165.0" text="Wybierana lista operacji" />
+                                    <ListView layoutX="15.0" layoutY="55.0" prefHeight="600.0" prefWidth="285.0" />
+                                    <Label alignment="CENTER" layoutX="1.0" layoutY="14.0" prefHeight="28.0" prefWidth="316.0" text="Lista operacji:">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font></Label>
                                  </children>
                               </AnchorPane>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
-                                    <ListView layoutX="70.0" layoutY="219.0" prefHeight="190.0" prefWidth="118.0" />
-                                    <Label layoutX="32.0" layoutY="171.0" text="Lista udzialowcow wybranej operacji" />
+                                    <ListView layoutX="20.0" layoutY="180.0" prefHeight="470.0" prefWidth="285.0" />
+                                    <Label layoutX="20.0" layoutY="150.0" text="Komu:">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font></Label>
+                                    <Label alignment="CENTER" layoutY="14.0" prefHeight="28.0" prefWidth="322.0" text="Nazwa operacji">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="20.0" layoutY="80.0" text="Kto:">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font>
+                                    </Label>
+                                    <Label alignment="CENTER" layoutX="55.0" layoutY="80.0" prefHeight="28.0" prefWidth="213.0" text="Osoba">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font>
+                                    </Label>
                                  </children>
                               </AnchorPane>
                           </items>
@@ -46,47 +72,30 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
-                        <SplitPane dividerPositions="0.5034013605442177" prefHeight="196.0" prefWidth="296.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <SplitPane prefHeight="196.0" prefWidth="296.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <items>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
-                                    <ListView layoutX="9.0" layoutY="90.0" prefHeight="190.0" prefWidth="118.0" />
-                                    <Label layoutX="54.0" layoutY="46.0" text="Lista osob" />
-                                 </children>
-                              </AnchorPane>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                 <children>
-                                    <Label layoutX="25.0" layoutY="44.0" text="Lista rachunkow" />
-                                    <ListView layoutX="8.0" layoutY="84.0" prefHeight="190.0" prefWidth="118.0" />
+                                    <ListView fx:id="memberListView" layoutX="9.0" layoutY="90.0" prefHeight="190.0" prefWidth="118.0" />
+                                    <Label alignment="CENTER" layoutX="-2.0" layoutY="29.0" prefHeight="21.0" prefWidth="171.0" text="Lista zapisanych osob">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font></Label>
                                  </children>
                               </AnchorPane>
                           </items>
                         </SplitPane>
                      </children>
                   </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
-                        <SplitPane dividerPositions="0.21768707482993196" layoutX="50.0" layoutY="33.0" orientation="VERTICAL" prefHeight="296.0" prefWidth="278.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <items>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                                 <children>
-                                    <TextField layoutX="14.0" layoutY="14.0" />
-                                    <Button layoutX="181.0" layoutY="14.0" mnemonicParsing="false" text="nowa osoba" />
-                                 </children>
-                              </AnchorPane>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                                 <children>
-                                    <TextField layoutX="95.0" layoutY="14.0" />
-                                    <Button layoutX="150.0" layoutY="157.0" mnemonicParsing="false" text="nowa operacja" />
-                                    <TextField layoutX="95.0" layoutY="53.0" />
-                                    <Label layoutX="25.0" layoutY="18.0" text="Kto" />
-                                    <Label layoutX="21.0" layoutY="57.0" text="Komu" />
-                                    <Label layoutX="23.0" layoutY="91.0" text="Za co" />
-                                    <TextField layoutX="95.0" layoutY="87.0" />
-                                 </children>
-                              </AnchorPane>
-                          </items>
-                        </SplitPane>
+                        <TextField layoutX="95.0" layoutY="14.0" />
+                        <Button layoutX="150.0" layoutY="157.0" mnemonicParsing="false" text="Dodaj operacje" />
+                        <TextField layoutX="95.0" layoutY="53.0" />
+                        <Label layoutX="25.0" layoutY="18.0" text="Kto" />
+                        <Label layoutX="21.0" layoutY="57.0" text="Komu" />
+                        <Label layoutX="23.0" layoutY="91.0" text="Za co" />
+                        <TextField layoutX="95.0" layoutY="87.0" />
                      </children>
                   </AnchorPane>
               </items>

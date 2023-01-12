@@ -1,3 +1,4 @@
+package backend;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -67,7 +68,7 @@ public class Bill {
 
 
 // generates hashmap:
-// key: Member[] - [debtor, creditor]
+// key: backend.Member[] - [debtor, creditor]
 // val: double - amount
     public Map<Member[], Double> minTransfers() {
         createPosNegLists();
@@ -134,7 +135,7 @@ public class Bill {
 
     @Override
     public String toString() {
-        return "Bill{" +
+        return "backend.Bill{" +
                 "V=" + V +
                 ", members=" + members +
                 ", negatives=" + negatives +

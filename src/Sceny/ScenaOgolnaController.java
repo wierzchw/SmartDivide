@@ -1,37 +1,80 @@
 package Sceny;
 
+import backend.Bill;
+import backend.Holder;
+import backend.Member;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
-public class ScenaOgolnaController extends ScenyUzytkowe{
+public class ScenaOgolnaController implements Initializable {
+
     @FXML
-    Label nazwaRachunku;
+    private Label billName;
 
-    public void displayNazwaRachunku() {
-        nazwaRachunku.setText(rachunek.getNazwa());
+    @FXML
+    private TextField changeBillNameField;
+
+    @FXML
+    private ListView<String> memberListView;
+
+
+    Bill bill;
+    Holder holder;
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
+    private Member selectedMember;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        holder = new Holder();
+        ArrayList<Member> members = holder.getMembers();
+
+        for (Member member : members) {
+            memberListView.getItems().add(member.getName());
+        }
+
+        memberListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                String selectedMemberName = memberListView.getSelectionModel().getSelectedItem();
+                for (Member member: members) {
+                    if(Objects.equals(member.getName(), selectedMemberName)){
+                        selectedMember = member;
+                        break;
+                    }
+                }
+            }
+        });
     }
 
-    public void switchToScenaDokladna(ActionEvent event) throws IOException {
-        // import
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("ScenaDokladna.fxml"));
-        root = loader.load();
-        ScenaDokladnaController scenaDokladnaController = loader.getController();
-        scenaDokladnaController.setRachunek(rachunek);
+    public void changeBillName(){
+        //todo
+    }
 
-        // display
-        scenaDokladnaController.displayNazwaRachunku();
+    public void displayBillName(){
+        billName.setText(bill.getTitle());
+    }
 
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
+    public void setBill(Bill bill) {
+        this.bill = bill;
+    }
+
+    public void setHolder(Holder holder) {
+        this.holder = holder;
     }
 }

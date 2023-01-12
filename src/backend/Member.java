@@ -1,3 +1,5 @@
+package backend;
+
 public class Member {
     String name;
 
@@ -5,9 +7,13 @@ public class Member {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String toString() {
-        return "Member{" +
+        return "backend.Member{" +
                 "name='" + name + '\'' +
                 '}';
     }
