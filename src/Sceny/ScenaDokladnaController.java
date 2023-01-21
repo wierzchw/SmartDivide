@@ -121,7 +121,11 @@ public class ScenaDokladnaController implements Initializable {
 
     @FXML
     void deleteMember(ActionEvent event) {
-
+        if (selectedMember == null || bill.getDebtList().get(selectedMember) != 0) {
+            return;
+        }
+        membersListView.getItems().remove(selectedMember.getName());
+        bill.removeMember(selectedMember);
     }
 
     @FXML
@@ -137,7 +141,7 @@ public class ScenaDokladnaController implements Initializable {
             }
         }
 
-        if (selectedSavedMember == null || savedMemberPresent){
+        if (selectedSavedMember == null ||  savedMemberPresent){
             return;
         }
 
@@ -145,9 +149,20 @@ public class ScenaDokladnaController implements Initializable {
         holder.getMembers().remove(selectedSavedMember);
     }
 
+    @FXML
     void addSavedMember(ActionEvent event) {
-        bill.addMember(selectedSavedMember);
-        membersListView.getItems().add(selectedSavedMember.getName());
+        boolean sameNameMemberExists = false;
+        for (Member member : bill.getMembers()) {
+            if (Objects.equals(member.getName(), selectedSavedMember.getName())) {
+                sameNameMemberExists = true;
+                break;
+            }
+        }
+
+        if (!sameNameMemberExists) {
+            bill.addMember(selectedSavedMember);
+            membersListView.getItems().add(selectedSavedMember.getName());
+        }
     }
 
     @FXML

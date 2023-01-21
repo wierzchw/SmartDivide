@@ -29,6 +29,11 @@ public class Bill {
         debtList.put(a, (double) 0);
     }
 
+    public void removeMember(Member a) {
+        V -= 1;
+        members.remove(a);
+        debtList.remove(a);
+    }
 
     // add directed edge v->w
     public void addDebt(double amount, Member debtor, Member creditor) {
