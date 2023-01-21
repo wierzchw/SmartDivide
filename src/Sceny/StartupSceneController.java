@@ -45,9 +45,16 @@ public class StartupSceneController implements Initializable {
 
     private Bill selectedBill;
 
+    public StartupSceneController(Holder holder) {
+        this.holder = holder;
+    }
+
+    public StartupSceneController() {
+        this.holder = new Holder();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        holder = new Holder();
         ArrayList<Bill> bills = holder.getBills();
 
         for (Bill bill : bills) {
@@ -69,18 +76,10 @@ public class StartupSceneController implements Initializable {
     }
 
     public void controllerAddBill() {
-        Bill newBill = new Bill(newBillName.getText());
         ArrayList<Bill> bills = holder.getBills();
-        boolean sameNameBillExists = false;
+        Bill newBill = new Bill(newBillName.getText());
 
-        for (Bill bill : bills) {
-            if (Objects.equals(bill.getTitle(), newBill.getTitle())) {
-                sameNameBillExists = true;
-                break;
-            }
-        }
-
-        if(!sameNameBillExists) {
+        if(!holder.checkBillExistence(newBill.getTitle())) {
             holder.addBill(newBill);
             listView.getItems().add((bills.get(bills.size() - 1)).getTitle());
         }
@@ -96,12 +95,12 @@ public class StartupSceneController implements Initializable {
         if(selectedBill == null){
             return;
         }
+
+        ScenaOgolnaController scenaOgolnaController = new ScenaOgolnaController(holder, selectedBill);
         FXMLLoader fxmlLoader  = new FXMLLoader(getClass().getResource("../Sceny/ScenaOgolna.fxml"));
+        fxmlLoader.setController(scenaOgolnaController);
         root = fxmlLoader.load();
 
-        ScenaOgolnaController scenaOgolnaController = fxmlLoader.getController();
-        scenaOgolnaController.setBill(selectedBill);
-        scenaOgolnaController.setHolder(holder);
         scenaOgolnaController.displayBillName();
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -109,4 +108,9 @@ public class StartupSceneController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
+    public void setHolder(Holder holder) {
+        this.holder = holder;
+    }
+
 }

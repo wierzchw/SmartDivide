@@ -179,6 +179,10 @@ public class Bill {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public Map<Member, Double> getDebtList() {
         return debtList;
     }

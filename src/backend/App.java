@@ -13,7 +13,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        StartupSceneController startupSceneController = new StartupSceneController();
         FXMLLoader fxmlLoader  = new FXMLLoader(getClass().getResource("../Sceny/StartupScene.fxml"));
+        fxmlLoader.setController(startupSceneController);
+
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);
