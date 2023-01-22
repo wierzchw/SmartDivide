@@ -36,19 +36,19 @@ public class Bill {
     }
 
     // add directed edge v->w
-    public void addDebt(double amount, Member debtor, Member creditor) {
+    public void addDebt(String debtTitle, double amount, Member debtor, Member creditor) {
         double debtorDebt = debtList.get(debtor);
         double creditorDebt = debtList.get(creditor);
         debtList.replace(debtor, debtorDebt - amount);
         debtList.replace(creditor, creditorDebt + amount);
-        transactionHistory.add(new Transaction(amount, debtor, creditor, LocalDateTime.now()));
+        transactionHistory.add(new Transaction(amount, debtor, creditor, LocalDateTime.now(), debtTitle));
     }
-    public void addDebtForTime(double amount, Member debtor, Member creditor, LocalDateTime time) {
+    public void addDebtForTime(String debtTitle, double amount, Member debtor, Member creditor, LocalDateTime time) {
         double debtorDebt = debtList.get(debtor);
         double creditorDebt = debtList.get(creditor);
         debtList.replace(debtor, debtorDebt - amount);
         debtList.replace(creditor, creditorDebt + amount);
-        transactionHistory.add(new Transaction(amount, debtor, creditor, time));
+        transactionHistory.add(new Transaction(amount, debtor, creditor, time, debtTitle));
     }
 
 
@@ -148,17 +148,17 @@ public class Bill {
                 '}';
     }
 
-    public void addGroupDebt(Double amount, Member creditor, Member... debtors){
+    public void addGroupDebt(String debtTitle, Double amount, Member creditor, Member... debtors){
         double perMember = amount/debtors.length;
         perMember = floor(perMember*100)/100;
         for (Member debtor: debtors) {
-            addDebt(perMember, debtor, creditor);
+            addDebt(debtTitle, perMember, debtor, creditor);
         }
         double roundingError = amount - perMember*debtors.length;
 
         if (roundingError != 0){
             for (int i = 0; i < roundingError*100; i++) {
-                addDebt(0.01, debtors[i%debtors.length], creditor);
+                addDebt(debtTitle, 0.01, debtors[i%debtors.length], creditor);
             }
         }
     }
@@ -170,7 +170,7 @@ public class Bill {
             }
         }
         for (Transaction trans : otherBill.getTransactionHistory()){
-            addDebtForTime(trans.getAmount(), trans.getDebtor(), trans.getCreditor(), trans.getTime());
+            addDebtForTime(trans.getTitle(), trans.getAmount(), trans.getDebtor(), trans.getCreditor(), trans.getTime());
         }
         title = title + " + " + otherBill.getTitle();
 
