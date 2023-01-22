@@ -7,12 +7,14 @@ public class Transaction{
     private Member debtor;
     private Member creditor;
     private LocalDateTime time;
+    private String title;
 
-    public Transaction(double amount, Member debtor, Member creditor, LocalDateTime time) {
+    public Transaction(double amount, Member debtor, Member creditor, LocalDateTime time, String title) {
         this.amount = amount;
         this.debtor = debtor;
         this.creditor = creditor;
         this.time = time;
+        this.title = title;
     }
 
     @Override
@@ -39,6 +41,14 @@ public class Transaction{
 
     public LocalDateTime getTime() {
         return time;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
 

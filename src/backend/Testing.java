@@ -45,10 +45,10 @@ public class Testing {
             mat2.addMember(member);
         }
 
-        mat.addDebt(40, a,b);
-        mat.addDebt(40, b,c);
-        mat.addDebt(20, c,d);
-        mat2.addDebt(70, a, a1);
+        mat.addDebt("1",40, a,b);
+        mat.addDebt("2", 40, b,c);
+        mat.addDebt("3", 20, c,d);
+        mat2.addDebt("4", 70, a, a1);
 //        mat.addDebt(20, d, a);
 //        mat.addDebt(50, f,d);
 //        mat.addDebt(20.25, a, e);
