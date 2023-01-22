@@ -1,3 +1,4 @@
+package backend;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -28,6 +29,11 @@ public class Bill {
         debtList.put(a, (double) 0);
     }
 
+    public void removeMember(Member a) {
+        V -= 1;
+        members.remove(a);
+        debtList.remove(a);
+    }
 
     // add directed edge v->w
     public void addDebt(double amount, Member debtor, Member creditor) {
@@ -67,7 +73,7 @@ public class Bill {
 
 
 // generates hashmap:
-// key: Member[] - [debtor, creditor]
+// key: backend.Member[] - [debtor, creditor]
 // val: double - amount
     public Map<Member[], Double> minTransfers() {
         createPosNegLists();
@@ -134,7 +140,7 @@ public class Bill {
 
     @Override
     public String toString() {
-        return "Bill{" +
+        return "backend.Bill{" +
                 "V=" + V +
                 ", members=" + members +
                 ", negatives=" + negatives +
@@ -176,6 +182,10 @@ public class Bill {
 
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Map<Member, Double> getDebtList() {

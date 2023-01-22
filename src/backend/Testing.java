@@ -1,3 +1,5 @@
+package backend;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -74,18 +76,26 @@ public class Testing {
 
         //merging
         System.out.println("-------------------");
+        System.out.println("mergeBills()");
         mat.mergeBills(mat2);
         mat.minTransfers();
         System.out.println(mat);
 
+        System.out.println("minTransfers.keySet().stream().toList()");
         Map<Member[], Double> result2 = mat.minTransfers();
         for (Member[] members : result2.keySet().stream().toList()) {
             System.out.println(members[0] + " wisi " + members[1] + " " + result2.get(members));
         }
+
+        System.out.println("getTransactionHistory");
         for (Transaction transaction: mat.getTransactionHistory()) {
             System.out.println(transaction);
         }
+
+        System.out.println("getDebtList");
         System.out.println(mat.getDebtList());
+
+        System.out.println("getTitle");
         System.out.println(mat.getTitle());
 
 

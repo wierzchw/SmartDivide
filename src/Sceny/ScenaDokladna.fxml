@@ -4,10 +4,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Sceny.ScenaDokladnaController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <SplitPane dividerPositions="0.6478696741854637" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
@@ -15,9 +16,11 @@
                <items>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
-                        <Button layoutX="210.0" layoutY="39.0" mnemonicParsing="false" onAction="#switchToScenaOgolna" text="Pokaz widok operacji" />
-                        <Label fx:id="nazwaRachunku" layoutX="54.0" layoutY="43.0" text="Akturalny rachunek" />
-                        <Button layoutX="353.0" layoutY="39.0" mnemonicParsing="false" text="Pokaz liste rachunkow" />
+                        <Button fx:id="switchToScenaOgolnaButton" layoutX="483.0" layoutY="27.0" mnemonicParsing="false" onAction="#switchToScenaOgolna" text="Pokaz widok operacji" />
+                        <Label fx:id="billName" layoutX="40.0" layoutY="25.0" text="Akturalny rachunek">
+                           <font>
+                              <Font size="19.0" />
+                           </font></Label>
                      </children>
                   </AnchorPane>
                   <SplitPane prefHeight="160.0" prefWidth="200.0">
@@ -26,14 +29,32 @@
                            <items>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
-                                    <ListView layoutX="61.0" layoutY="219.0" prefHeight="190.0" prefWidth="118.0" />
-                                    <Label layoutX="57.0" layoutY="165.0" text="Wybierana lista osob" />
+                                    <ListView fx:id="membersListView" editable="true" layoutX="16.0" layoutY="55.0" prefHeight="500.0" prefWidth="285.0" />
+                                    <Label alignment="CENTER" layoutX="2.0" layoutY="14.0" prefHeight="28.0" prefWidth="316.0" text="Lista osob w rachunku:">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font></Label>
+                                    <Button fx:id="deleteMemberButton" layoutX="183.0" layoutY="584.0" mnemonicParsing="false" onAction="#deleteMember" text="Usuń osobę" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
-                                    <ListView layoutX="70.0" layoutY="219.0" prefHeight="190.0" prefWidth="118.0" />
-                                    <Label layoutX="32.0" layoutY="171.0" text="Lista należności wybranej osoby" />
+                                    <ListView fx:id="debtsListView" layoutX="20.0" layoutY="180.0" prefHeight="372.0" prefWidth="285.0" />
+                                    <Label alignment="CENTER" layoutX="2.0" layoutY="14.0" prefHeight="28.0" prefWidth="322.0" text="Imię osoby">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font></Label>
+                                    <Label alignment="CENTER" layoutY="80.0" prefHeight="28.0" prefWidth="322.0" text="Bilans">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="20.0" layoutY="150.0" text="Lista należności:">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font>
+                                    </Label>
+                                    <Button fx:id="deleteDebtButton" layoutX="107.0" layoutY="583.0" mnemonicParsing="false" onAction="#deleteDebt" text="Uregulowano" />
                                  </children>
                               </AnchorPane>
                            </items>
@@ -46,18 +67,14 @@
                <items>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
-                        <SplitPane dividerPositions="0.5034013605442177" prefHeight="196.0" prefWidth="296.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <SplitPane prefHeight="196.0" prefWidth="296.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <items>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
-                                    <ListView layoutX="9.0" layoutY="90.0" prefHeight="190.0" prefWidth="118.0" />
-                                    <Label layoutX="54.0" layoutY="46.0" text="Lista osob" />
-                                 </children>
-                              </AnchorPane>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                 <children>
-                                    <Label layoutX="25.0" layoutY="44.0" text="Lista rachunkow" />
-                                    <ListView layoutX="8.0" layoutY="84.0" prefHeight="190.0" prefWidth="118.0" />
+                                    <ListView fx:id="savedMemebersListView" editable="true" layoutX="53.0" layoutY="89.0" prefHeight="190.0" prefWidth="118.0" />
+                                    <Label layoutX="54.0" layoutY="46.0" text="Lista zapamiętanych osób" />
+                                    <Button fx:id="forgetMemberButton" layoutX="53.0" layoutY="299.0" mnemonicParsing="false" onAction="#forgetMember" text="Usuń z listy zapamiętanych osób" />
+                                    <Button fx:id="addSavedMemberButton" layoutX="53.0" layoutY="337.0" mnemonicParsing="false" onAction="#addSavedMember" text="Dodaj osobę" />
                                  </children>
                               </AnchorPane>
                            </items>
@@ -66,7 +83,9 @@
                   </AnchorPane>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
-                        <TextArea layoutX="55.0" layoutY="44.0" prefHeight="190.0" prefWidth="169.0" text="Ten rog ma byc nie uzywany &#10;w tym widoku bo chyba &#10;nie ma to sensu za bardzo,&#10;bede probowal go jakos &#10;graficznie wyszarzyc i &#10;dezaktywowac" />
+                        <Label layoutX="46.0" layoutY="38.0" text="Imię:" />
+                        <Button fx:id="addMemberButton" layoutX="133.0" layoutY="83.0" mnemonicParsing="false" onAction="#addMember" text="Dodaj osobę" />
+                        <TextField fx:id="addMemberTextField" layoutX="93.0" layoutY="34.0" />
                      </children>
                   </AnchorPane>
                </items>
