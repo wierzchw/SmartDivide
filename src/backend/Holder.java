@@ -3,6 +3,7 @@ package backend;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Holder  {
@@ -25,6 +26,11 @@ public class Holder  {
         bills.get(0).addDebtForTime("Operacja1", BigDecimal.valueOf(20), member1, member2, LocalDateTime.now());
     }
 
+    public Holder(List<Bill> bills, List<Member> members) {
+        this.bills = (ArrayList<Bill>) bills;
+        this.members = (ArrayList<Member>) members;
+    }
+
     public boolean checkBillExistence(String newBillTitle) {
         boolean sameNameBillExists = false;
 
@@ -44,6 +50,9 @@ public class Holder  {
             for (Member member : bill.getMembers()) {
                 if (Objects.equals(member.getName(), newMemberName)) {
                     sameNameMemberExists = true;
+
+                    //TESTY
+                    System.out.println("member istnieje w bill: " + bill);
                     break;
                 }
             }

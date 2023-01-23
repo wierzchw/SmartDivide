@@ -56,6 +56,10 @@ public class ScenaDokladnaController implements Initializable {
     private Label selectedMemberBilans;
     @FXML
     private Label selectedMemberName;
+    @FXML
+    private TextField changeMemberNameTextField;
+    @FXML
+    private Button changeMemberNameButton;
 
 
     private Member selectedSavedMember;
@@ -92,6 +96,8 @@ public class ScenaDokladnaController implements Initializable {
         // sekcja długów osoby
         debtsListView.getSelectionModel().selectedItemProperty().addListener(this::changedDebt);
 
+        //TESTY
+        System.out.println("bill members:" + bill.getMembers());
     }
 
     private void changedDebt(Observable observable) {
@@ -99,25 +105,33 @@ public class ScenaDokladnaController implements Initializable {
 
         Map<Member[], BigDecimal> result = bill.getSolution();
         for (Member[] members : result.keySet().stream().toList()){
+            if (selectedDebtName == null) {break;}
             String checkedName = result.get(members) + " => " + members[1].getName();
             if (selectedDebtName.equals(checkedName)) {
                 selectedDebt = members;
             }
         }
+
+        //TESTY
+        System.out.println("selected Debt:" + selectedDebt);
     }
 
 
     private void changedMember(Observable observable) {
         String selectedMemberName = membersListView.getSelectionModel().getSelectedItem();
 
-        ArrayList<Member> members = holder.getMembers();
+        ArrayList<Member> members = new ArrayList<>();
+        members.addAll(holder.getMembers());
         members.addAll(bill.getMembers());
         for (Member member : members)
             if (Objects.equals(member.getName(), selectedMemberName)) {
                 selectedMember = member;
+                updateDebtList();
             }
-        updateDebtList();
         members.clear();
+
+        //TESTY
+        System.out.println("selected member:" + selectedMember);
     }
 
     private void updateDebtList() {
@@ -138,11 +152,17 @@ public class ScenaDokladnaController implements Initializable {
     private void changedSavedMember(Observable observable) {
         String selectedSavedMemberName = savedMemebersListView.getSelectionModel().getSelectedItem();
 
-        ArrayList<Member> members = holder.getMembers();
+        ArrayList<Member> members = new ArrayList<>();
+        members.addAll(holder.getMembers());
         for (Member member : members)
             if (Objects.equals(member.getName(), selectedSavedMemberName)) {
                 selectedSavedMember = member;
             }
+
+        //TESTY
+        System.out.println("selected saved member name:" + selectedSavedMemberName);
+        System.out.println("holder members:" + members);
+        System.out.println("selected saved member:" + selectedSavedMember);
     }
 
 
@@ -161,17 +181,21 @@ public class ScenaDokladnaController implements Initializable {
 
     @FXML
     void deleteDebt(ActionEvent event) {
+        if (selectedDebt == null) {return;}
         bill.settleDebtFromSolution(selectedDebt[0], selectedDebt[1]);
         updateDebtList();
     }
 
     @FXML
     void deleteMember(ActionEvent event) {
-        if (selectedMember == null || bill.getDebtList().get(selectedMember).equals(BigDecimal.valueOf(0))) {
+        if (selectedMember == null || !bill.getDebtList().get(selectedMember).equals(BigDecimal.valueOf(0))) {
             return;
         }
-        membersListView.getItems().remove(selectedMember.getName());
         bill.removeMember(selectedMember);
+        membersListView.getItems().remove(selectedMember.getName());
+
+        //TESTY
+        System.out.println("bill members:" + bill.getMembers());
     }
 
     @FXML
@@ -191,8 +215,11 @@ public class ScenaDokladnaController implements Initializable {
             return;
         }
 
-        savedMemebersListView.getItems().remove(selectedSavedMember.getName());
         holder.getMembers().remove(selectedSavedMember);
+        savedMemebersListView.getItems().remove(selectedSavedMember.getName());
+
+        //TESTY
+        System.out.println("holder members:" + holder.getMembers());
     }
 
     @FXML
@@ -228,6 +255,21 @@ public class ScenaDokladnaController implements Initializable {
 
     public void displayBillName(){
         billName.setText(bill.getTitle());
+    }
+
+    public void changeMemberName() {
+        String newName = changeMemberNameTextField.getText();
+        if(!holder.checkMemberExistence(newName)) {
+            savedMemebersListView.getItems().remove(selectedSavedMember.getName());
+            membersListView.getItems().remove(selectedSavedMember.getName());
+
+            selectedSavedMember.setName(newName);
+
+            savedMemebersListView.getItems().add(selectedSavedMember.getName());
+            membersListView.getItems().add(selectedSavedMember.getName());
+
+            changeMemberNameTextField.clear();
+        }
     }
 
 }

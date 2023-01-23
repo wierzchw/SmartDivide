@@ -1,5 +1,6 @@
 package backend;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -8,7 +9,7 @@ import java.util.*;
 import static java.lang.Math.*;
 
 
-public class Bill {
+public class Bill implements Serializable {
     //number of vertices
     private String title;
     private int V = 0;

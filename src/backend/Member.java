@@ -1,6 +1,8 @@
 package backend;
 
-public class Member {
+import java.io.Serializable;
+
+public class Member implements Serializable {
     String name;
 
     public Member(String name) {

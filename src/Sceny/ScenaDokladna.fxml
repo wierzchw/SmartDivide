@@ -63,7 +63,7 @@
                   </SplitPane>
                </items>
             </SplitPane>
-            <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0">
+            <SplitPane dividerPositions="0.7994987468671679" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0">
                <items>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
@@ -71,10 +71,16 @@
                            <items>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
-                                    <ListView fx:id="savedMemebersListView" editable="true" layoutX="53.0" layoutY="89.0" prefHeight="190.0" prefWidth="118.0" />
-                                    <Label layoutX="54.0" layoutY="46.0" text="Lista zapamiętanych osób" />
-                                    <Button fx:id="forgetMemberButton" layoutX="53.0" layoutY="299.0" mnemonicParsing="false" onAction="#forgetMember" text="Usuń z listy zapamiętanych osób" />
-                                    <Button fx:id="addSavedMemberButton" layoutX="53.0" layoutY="337.0" mnemonicParsing="false" onAction="#addSavedMember" text="Dodaj osobę" />
+                                    <ListView fx:id="savedMemebersListView" editable="true" layoutX="61.0" layoutY="138.0" prefHeight="190.0" prefWidth="118.0" />
+                                    <Label layoutX="52.0" layoutY="96.0" text="Lista zapamiętanych osób">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font></Label>
+                                    <Button fx:id="forgetMemberButton" layoutX="60.0" layoutY="358.0" mnemonicParsing="false" onAction="#forgetMember" text="Usuń z listy zapamiętanych osób" />
+                                    <Button fx:id="addSavedMemberButton" layoutX="60.0" layoutY="415.0" mnemonicParsing="false" onAction="#addSavedMember" text="Dodaj do rachunku" />
+                                    <Label layoutX="60.0" layoutY="486.0" text="Nowe Imię:" />
+                                    <TextField fx:id="changeMemberNameTextField" layoutX="137.0" layoutY="482.0" />
+                                    <Button fx:id="changeMemberNameButton" layoutX="60.0" layoutY="547.0" mnemonicParsing="false" onAction="#changeMemberName" text="Zmień imię" />
                                  </children>
                               </AnchorPane>
                            </items>
@@ -84,7 +90,7 @@
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
                         <Label layoutX="46.0" layoutY="38.0" text="Imię:" />
-                        <Button fx:id="addMemberButton" layoutX="133.0" layoutY="83.0" mnemonicParsing="false" onAction="#addMember" text="Dodaj osobę" />
+                        <Button fx:id="addMemberButton" layoutX="133.0" layoutY="83.0" mnemonicParsing="false" onAction="#addMember" text="Dodaj nową osobę" />
                         <TextField fx:id="addMemberTextField" layoutX="93.0" layoutY="34.0" />
                      </children>
                   </AnchorPane>

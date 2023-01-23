@@ -1,19 +1,18 @@
 package backend;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Serialize {private static final long serialVersionUID = 1234567L;
+public class Serialize implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1234567L;
     List<Bill> bills;
     List<Member> members;
 
-    public Serialize(){
-        this.bills = new ArrayList<>();
-        this.members = new ArrayList<>();
+    public Serialize(ArrayList<Bill> bills, ArrayList<Member> members){
+        this.bills = bills;
+        this.members = members;
     }
 
     public Serialize (String file) throws Exception{
@@ -24,8 +23,7 @@ public class Serialize {private static final long serialVersionUID = 1234567L;
 
     private Serialize readState(String file) throws Exception{
         try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))){
-            Serialize d  = (Serialize) ois.readObject();
-            return d;
+            return (Serialize) ois.readObject();
         }
     }
 
