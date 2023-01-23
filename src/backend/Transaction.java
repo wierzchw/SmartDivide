@@ -20,6 +20,7 @@ public class Transaction{
     @Override
     public String toString() {
         return "backend.Transaction{" +
+                "title=" + title +
                 "amount=" + amount +
                 ", debtor=" + debtor +
                 ", creditor=" + creditor +

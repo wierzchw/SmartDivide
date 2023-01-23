@@ -91,8 +91,7 @@ public class ScenaOgolnaController implements Initializable {
         // transaction section
         ArrayList<Transaction> transactions = (ArrayList<Transaction>) bill.getTransactionHistory();
         for (Transaction transaction : transactions) {
-            // todo
-            transactionHistory.getItems().add(transaction.getCreditor().getName());
+            transactionHistory.getItems().add(transaction.getTitle());
         }
 
         transactionHistory.getSelectionModel().selectedItemProperty().addListener(this::changedTransaction);
@@ -105,17 +104,15 @@ public class ScenaOgolnaController implements Initializable {
 
         ArrayList<Transaction> transactions = (ArrayList<Transaction>) bill.getTransactionHistory();
         for (Transaction transaction : transactions) {
-            if (Objects.equals(transaction.getCreditor().getName(), transactionTitle)) {
+            if (transactionTitle.equals(transaction.getTitle())) {
                 currentTransaction = transaction;
             }
         }
-
         displayTransactionDetails();
     }
 
     private void displayTransactionDetails() {
-        //todo
-        transactionName.setText(currentTransaction.getCreditor().getName());
+        transactionName.setText(currentTransaction.getTitle());
         transactionCreditor.setText(currentTransaction.getCreditor().getName());
         transactionDebtor.setText(currentTransaction.getDebtor().getName());
         transactionValue.setText(String.valueOf(currentTransaction.getAmount()));
@@ -126,10 +123,13 @@ public class ScenaOgolnaController implements Initializable {
         String selectedCreditorName = newTransactionCreditor.getSelectionModel().getSelectedItem();
 
         ArrayList<Member> members = holder.getMembers();
-        for (Member member : members)
-                if (Objects.equals(member.getName(), selectedCreditorName)) {
-                    selectedTransactionCreditor = member;
-                }
+        members.addAll(bill.getMembers());
+        for (Member member : members) {
+            if (Objects.equals(member.getName(), selectedCreditorName)) {
+                selectedTransactionCreditor = member;
+            }
+        }
+        members.clear();
     }
 
     private void changedDebtors(ObservableValue<? extends String> observableValue, String s, String t1) {
@@ -148,11 +148,6 @@ public class ScenaOgolnaController implements Initializable {
             }
         }
         members.clear();
-
-        System.out.println("selectedDebtorsNames:");
-        System.out.println(selectedDebtorsNames);
-        System.out.println("selectedTransactionDebtors:");
-        System.out.println(selectedTransactionDebtors);
     }
 
     public void closeBill(ActionEvent event) throws IOException {
@@ -206,24 +201,25 @@ public class ScenaOgolnaController implements Initializable {
             return;
         }
 
-        Member[] debtors = new Member[selectedTransactionDebtors.size()];
-        debtors = selectedTransactionDebtors.toArray(debtors);
-        System.out.println(Arrays.toString(debtors));
+        String title = newTransactionTItle.getText();
 
         Double value = Double.valueOf(newTransactionValue.getText());
-        System.out.println(value);
 
-        String title = newTransactionTItle.getText();
-        System.out.println(title);
+        Member[] debtors = new Member[selectedTransactionDebtors.size()];
+        debtors = selectedTransactionDebtors.toArray(debtors);
 
         Member creditor = selectedTransactionCreditor;
-        System.out.println(creditor);
 
         if (selectedTransactionDebtors.size() > 1) {
-            bill.addGroupDebt(value, creditor, debtors);
+            bill.addGroupDebt(title, value, creditor, debtors);
         } else {
-            bill.addDebtForTime(value, debtors[0], creditor, LocalDateTime.now());
+            bill.addDebtForTime(title, value, debtors[0], creditor, LocalDateTime.now());
         }
+
+        int size = bill.getTransactionHistory().size();
+        transactionHistory.getItems().add(bill.getTransactionHistory().get(size - 1).getTitle());
+
+        System.out.println(transactionHistory.toString());
     }
 
 }

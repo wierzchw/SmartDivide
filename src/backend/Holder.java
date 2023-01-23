@@ -21,7 +21,7 @@ public class Holder {
         bills.add(new Bill("bill2"));
         bills.get(0).addMember(member1);
         bills.get(0).addMember(member2);
-        bills.get(0).addDebtForTime(20, member1, member2, LocalDateTime.now());
+        bills.get(0).addDebtForTime("Operacja1",20, member1, member2, LocalDateTime.now());
     }
 
     public boolean checkBillExistence(String newBillTitle) {
