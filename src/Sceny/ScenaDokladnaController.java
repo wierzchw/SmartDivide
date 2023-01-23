@@ -56,6 +56,10 @@ public class ScenaDokladnaController implements Initializable {
     private Label selectedMemberBilans;
     @FXML
     private Label selectedMemberName;
+    @FXML
+    private TextField changeMemberNameTextField;
+    @FXML
+    private Button changeMemberNameButton;
 
 
     private Member selectedSavedMember;
@@ -250,6 +254,21 @@ public class ScenaDokladnaController implements Initializable {
 
     public void displayBillName(){
         billName.setText(bill.getTitle());
+    }
+
+    public void changeMemberName() {
+        String newName = changeMemberNameTextField.getText();
+        if(!holder.checkMemberExistence(newName)) {
+            savedMemebersListView.getItems().remove(selectedSavedMember.getName());
+            membersListView.getItems().remove(selectedSavedMember.getName());
+
+            selectedSavedMember.setName(newName);
+
+            savedMemebersListView.getItems().add(selectedSavedMember.getName());
+            membersListView.getItems().add(selectedSavedMember.getName());
+
+            changeMemberNameTextField.clear();
+        }
     }
 
 }

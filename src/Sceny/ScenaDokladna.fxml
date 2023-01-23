@@ -63,7 +63,7 @@
                   </SplitPane>
                </items>
             </SplitPane>
-            <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0">
+            <SplitPane dividerPositions="0.7994987468671679" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0">
                <items>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
@@ -75,6 +75,9 @@
                                     <Label layoutX="54.0" layoutY="46.0" text="Lista zapamiętanych osób" />
                                     <Button fx:id="forgetMemberButton" layoutX="53.0" layoutY="299.0" mnemonicParsing="false" onAction="#forgetMember" text="Usuń z listy zapamiętanych osób" />
                                     <Button fx:id="addSavedMemberButton" layoutX="53.0" layoutY="337.0" mnemonicParsing="false" onAction="#addSavedMember" text="Dodaj osobę" />
+                                    <Label layoutX="27.0" layoutY="395.0" text="Nowe Imię:" />
+                                    <TextField fx:id="changeMemberNameTextField" layoutX="97.0" layoutY="391.0" />
+                                    <Button fx:id="changeMemberNameButton" layoutX="63.0" layoutY="439.0" mnemonicParsing="false" onAction="#changeMemberName" text="Zmień imię" />
                                  </children>
                               </AnchorPane>
                            </items>
