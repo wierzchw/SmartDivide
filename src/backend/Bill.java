@@ -1,5 +1,7 @@
 package backend;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -12,12 +14,13 @@ public class Bill {
     private int V = 0;
 
     //adjacency matrix keeping track of debts
-    private Map<Member, Double> debtList = new HashMap<>();
+    private Map<Member, BigDecimal> debtList = new HashMap<>();
 
     private List<Member> members = new ArrayList<>();
-    private Map<Member, Double> negatives;
-    private Map<Member, Double> positives;
+    private Map<Member, BigDecimal> negatives;
+    private Map<Member, BigDecimal> positives;
     private List<Transaction> transactionHistory = new ArrayList<>();
+    private Map<Member[], BigDecimal> solution;
 
     public Bill(String title) {
         this.title = title;
@@ -26,35 +29,30 @@ public class Bill {
     public void addMember(Member a){
         V += 1;
         members.add(a);
-        debtList.put(a, (double) 0);
+        debtList.put(a, BigDecimal.valueOf(0));
     }
 
-    public void removeMember(Member a) {
-        V -= 1;
-        members.remove(a);
-        debtList.remove(a);
-    }
 
     // add directed edge v->w
-    public void addDebt(String debtTitle, double amount, Member debtor, Member creditor) {
-        double debtorDebt = debtList.get(debtor);
-        double creditorDebt = debtList.get(creditor);
-        debtList.replace(debtor, debtorDebt - amount);
-        debtList.replace(creditor, creditorDebt + amount);
+    public void addDebt(String debtTitle, BigDecimal amount, Member debtor, Member creditor) {
+        BigDecimal debtorDebt = debtList.get(debtor);
+        BigDecimal creditorDebt = debtList.get(creditor);
+        debtList.replace(debtor, debtorDebt.subtract(amount));
+        debtList.replace(creditor, creditorDebt.add(amount));
         transactionHistory.add(new Transaction(amount, debtor, creditor, LocalDateTime.now(), debtTitle));
     }
-    public void addDebtForTime(String debtTitle, double amount, Member debtor, Member creditor, LocalDateTime time) {
-        double debtorDebt = debtList.get(debtor);
-        double creditorDebt = debtList.get(creditor);
-        debtList.replace(debtor, debtorDebt - amount);
-        debtList.replace(creditor, creditorDebt + amount);
+    public void addDebtForTime(String debtTitle, BigDecimal amount, Member debtor, Member creditor, LocalDateTime time) {
+        BigDecimal debtorDebt = debtList.get(debtor);
+        BigDecimal creditorDebt = debtList.get(creditor);
+        debtList.replace(debtor, debtorDebt. subtract(amount));
+        debtList.replace(creditor, creditorDebt.add(amount));
         transactionHistory.add(new Transaction(amount, debtor, creditor, time, debtTitle));
     }
 
 
 
 
-//creates 2 maps:
+    //creates 2 maps:
 // members in debt with absolute value of debt (negatives)
 // members that are creditors with amount they lent
     public void createPosNegLists(){
@@ -62,50 +60,50 @@ public class Bill {
         positives = new HashMap<>();
         for (Member member: debtList.keySet().stream().toList()) {
 
-            if (debtList.get(member)<0) {
-                negatives.put(member, -debtList.get(member));
+            if (debtList.get(member).compareTo(BigDecimal.valueOf(0))<0) {
+                negatives.put(member, debtList.get(member).negate());
             }
-            else if(debtList.get(member)>0){
+            else if(debtList.get(member).compareTo(BigDecimal.valueOf(0))>0){
                 positives.put(member, debtList.get(member));
             }
         }
     }
 
 
-// generates hashmap:
-// key: backend.Member[] - [debtor, creditor]
+    // generates hashmap:
+// key: Member[] - [debtor, creditor]
 // val: double - amount
-    public Map<Member[], Double> minTransfers() {
+    public void minTransfers() {
         createPosNegLists();
         ReturnTypeForDfs result = dfs(negatives, positives);
-        return result.transactions;
+        solution = result.transactions;
     }
 
     private class ReturnTypeForDfs{
         public int count;
-        public Map<Member[], Double> transactions;
+        public Map<Member[], BigDecimal> transactions;
 
-        public ReturnTypeForDfs(int count, Map<Member[], Double> transactions) {
+        public ReturnTypeForDfs(int count, Map<Member[], BigDecimal> transactions) {
             this.count = count;
             this.transactions = transactions;
         }
 
     }
 
-   // main algorithm, returns ReturnTypeForDfs with:
-   //count - minimal number of transactions to settle debt
-   //transactions - HashMap of transactions needed to settle debt in count transactions
-    private ReturnTypeForDfs dfs(Map<Member, Double> negatives, Map<Member, Double> positives) {
+    // main algorithm, returns ReturnTypeForDfs with:
+    //count - minimal number of transactions to settle debt
+    //transactions - HashMap of transactions needed to settle debt in count transactions
+    private ReturnTypeForDfs dfs(Map<Member, BigDecimal> negatives, Map<Member, BigDecimal> positives) {
         if (negatives.size() + positives.size() == 0) return new ReturnTypeForDfs(0, new HashMap<>());
         Member neg = (Member) negatives.keySet().stream().toArray()[0];
         int count = Integer.MAX_VALUE;
-        Map<Member[], Double> transactions = new HashMap<>();
+        Map<Member[], BigDecimal> transactions = new HashMap<>();
         List<Member> positivesKeys = positives.keySet().stream().toList();
         for (Member pos : positivesKeys) {
-            Double posDouble = positives.get(pos);
-            Double negDouble = negatives.get(neg);
-            Map<Member, Double> newPositives = new HashMap<>();
-            Map<Member, Double> newNegatives = new HashMap<>();
+            BigDecimal posNumber = positives.get(pos);
+            BigDecimal negNumber = negatives.get(neg);
+            Map<Member, BigDecimal> newPositives = new HashMap<>();
+            Map<Member, BigDecimal> newNegatives = new HashMap<>();
             newNegatives.putAll(negatives);
             newPositives.putAll(positives);
             newNegatives.remove(neg);
@@ -114,22 +112,22 @@ public class Bill {
             Member[] fromTo = new Member[2];
             fromTo[0] = neg;
             fromTo[1] = pos;
-            double difference = negDouble - posDouble;
-            double transferred = min(negDouble, posDouble);
+            BigDecimal difference = negNumber.subtract(posNumber);
+            BigDecimal transferred = negNumber.min(posNumber);
 
-            if (difference > 0) {
+            if (difference.compareTo(BigDecimal.valueOf(0)) > 0) {
                 newNegatives.put(neg, difference);
-            } else if (difference < 0) {
-                newPositives.put(pos, -difference);
+            } else if (difference.compareTo(BigDecimal.valueOf(0)) < 0) {
+                newPositives.put(pos, difference.negate());
             }
             ReturnTypeForDfs ret = dfs(newNegatives, newPositives);
             if(ret.count < count){
                 count = ret.count;
-                ret.transactions.put(fromTo, abs(transferred));
+                ret.transactions.put(fromTo, transferred.abs());
                 transactions = ret.transactions;
             }
             else if(transactions.size()<count+1){
-                transactions.put(fromTo, abs(transferred));
+                transactions.put(fromTo, transferred.abs());
             }
 
         }
@@ -140,7 +138,7 @@ public class Bill {
 
     @Override
     public String toString() {
-        return "backend.Bill{" +
+        return "Bill{" +
                 "V=" + V +
                 ", members=" + members +
                 ", negatives=" + negatives +
@@ -148,17 +146,17 @@ public class Bill {
                 '}';
     }
 
-    public void addGroupDebt(String debtTitle, Double amount, Member creditor, Member... debtors){
-        double perMember = amount/debtors.length;
-        perMember = floor(perMember*100)/100;
-        for (Member debtor: debtors) {
-            addDebt(debtTitle, perMember, debtor, creditor);
-        }
-        double roundingError = amount - perMember*debtors.length;
+    public void addGroupDebt(String debtTitle, BigDecimal amount, Member creditor, Member... debtors){
+        BigDecimal perMember = amount.divide(BigDecimal.valueOf(debtors.length + 1), 2, RoundingMode.FLOOR);
+        BigDecimal roundingError = amount.subtract(perMember.multiply(BigDecimal.valueOf(debtors.length+1)));
 
-        if (roundingError != 0){
-            for (int i = 0; i < roundingError*100; i++) {
-                addDebt(debtTitle, 0.01, debtors[i%debtors.length], creditor);
+        for (Member debtor: debtors) {
+            if (roundingError.compareTo(BigDecimal.valueOf(0)) != 0){
+                addDebt(debtTitle, perMember.add(BigDecimal.valueOf(0.01)), debtor, creditor);
+                roundingError = roundingError.subtract(BigDecimal.valueOf(0.01));
+            }
+            else{
+                addDebt(debtTitle, perMember, debtor, creditor);
             }
         }
     }
@@ -172,8 +170,30 @@ public class Bill {
         for (Transaction trans : otherBill.getTransactionHistory()){
             addDebtForTime(trans.getTitle(), trans.getAmount(), trans.getDebtor(), trans.getCreditor(), trans.getTime());
         }
-        title = title + " + " + otherBill.getTitle();
 
+    }
+    public List<Transaction> transactionHistoryForMember (Member a){
+        List<Transaction> result = new ArrayList<>();
+        for (Transaction trans: transactionHistory){
+            if (trans.getDebtor() == a || trans.getCreditor() == a){
+                result.add(trans);
+            }
+        }
+        return result;
+    }
+    public void settleDebtFromSolution(Member debtor, Member creditor){
+        Member[] input = new Member[2];
+        input[0] = debtor;
+        input[1] = creditor;
+        BigDecimal amount;
+        for (Member[] dc: solution.keySet().stream().toList()) {
+            if (dc[0]==input[0] && dc[1] == input[1]){
+                amount = solution.remove(dc);
+                addDebt("zwrot", amount, creditor, debtor);
+                return;
+            }
+        }
+        return;
     }
 
     public int getV() {
@@ -184,11 +204,7 @@ public class Bill {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Map<Member, Double> getDebtList() {
+    public Map<Member, BigDecimal> getDebtList() {
         return debtList;
     }
 
@@ -198,5 +214,9 @@ public class Bill {
 
     public List<Transaction> getTransactionHistory() {
         return transactionHistory;
+    }
+
+    public Map<Member[], BigDecimal> getSolution() {
+        return solution;
     }
 }

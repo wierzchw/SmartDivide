@@ -1,5 +1,6 @@
 package backend;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,10 +46,10 @@ public class Testing {
             mat2.addMember(member);
         }
 
-        mat.addDebt("1",40, a,b);
-        mat.addDebt("2", 40, b,c);
-        mat.addDebt("3", 20, c,d);
-        mat2.addDebt("4", 70, a, a1);
+        mat.addDebt("1", BigDecimal.valueOf(40), a,b);
+        mat.addDebt("2", BigDecimal.valueOf(40), b,c);
+        mat.addDebt("3", BigDecimal.valueOf(20), c,d);
+        mat2.addDebt("4", BigDecimal.valueOf(70), a, a1);
 //        mat.addDebt(20, d, a);
 //        mat.addDebt(50, f,d);
 //        mat.addDebt(20.25, a, e);
@@ -64,7 +65,8 @@ public class Testing {
         System.out.println(mat);
 
 //        list of operations - OK
-        Map<Member[], Double> result = mat.minTransfers();
+        mat.minTransfers();
+        Map<Member[], BigDecimal> result = mat.getSolution();
         for (Member[] members : result.keySet().stream().toList()){
             System.out.println(members[0] + " wisi " + members[1] + " " + result.get(members)) ;
         }
@@ -82,7 +84,8 @@ public class Testing {
         System.out.println(mat);
 
         System.out.println("minTransfers.keySet().stream().toList()");
-        Map<Member[], Double> result2 = mat.minTransfers();
+        mat.minTransfers();
+        Map<Member[], BigDecimal> result2 = mat.getSolution();
         for (Member[] members : result2.keySet().stream().toList()) {
             System.out.println(members[0] + " wisi " + members[1] + " " + result2.get(members));
         }

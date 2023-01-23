@@ -1,15 +1,16 @@
 package backend;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Transaction{
-    private double amount;
+    private BigDecimal amount;
     private Member debtor;
     private Member creditor;
     private LocalDateTime time;
     private String title;
 
-    public Transaction(double amount, Member debtor, Member creditor, LocalDateTime time, String title) {
+    public Transaction(BigDecimal amount, Member debtor, Member creditor, LocalDateTime time, String title) {
         this.amount = amount;
         this.debtor = debtor;
         this.creditor = creditor;
@@ -27,7 +28,7 @@ public class Transaction{
                 '}';
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
