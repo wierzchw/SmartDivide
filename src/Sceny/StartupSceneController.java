@@ -71,8 +71,15 @@ public class StartupSceneController implements Initializable {
                         break;
                     }
                 }
+
+                //TESTY
+                System.out.println("selected bill:" + selectedBill);
             }
         });
+
+        //TESTY
+        System.out.println("holder members:" + holder.getMembers());
+        System.out.println("holder bills:" + holder.getBills());
     }
 
     public void controllerAddBill() {
@@ -84,11 +91,19 @@ public class StartupSceneController implements Initializable {
             listView.getItems().add((bills.get(bills.size() - 1)).getTitle());
         }
         newBillName.clear();
+
+        //TESTY
+        System.out.println("holder bills:" + holder.getBills());
     }
 
     public void controllerDeleteBill() {
-        listView.getItems().remove(selectedBill.getTitle());
+        if (selectedBill == null) { return;}
+
         holder.getBills().remove(selectedBill);
+        listView.getItems().remove(selectedBill.getTitle());
+
+        //TESTY
+        System.out.println("holder bills:" + holder.getBills());
     }
 
     public void openBill(ActionEvent event) throws IOException {

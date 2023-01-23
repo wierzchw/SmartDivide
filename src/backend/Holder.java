@@ -50,6 +50,9 @@ public class Holder  {
             for (Member member : bill.getMembers()) {
                 if (Objects.equals(member.getName(), newMemberName)) {
                     sameNameMemberExists = true;
+
+                    //TESTY
+                    System.out.println("member istnieje w bill: " + bill);
                     break;
                 }
             }

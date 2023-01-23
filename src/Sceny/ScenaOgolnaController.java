@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -103,7 +104,8 @@ public class ScenaOgolnaController implements Initializable {
     private void changedTransaction(Observable observable) {
         String transactionTitle = transactionHistory.getSelectionModel().getSelectedItem();
 
-        ArrayList<Transaction> transactions = (ArrayList<Transaction>) bill.getTransactionHistory();
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        transactions.addAll(bill.getTransactionHistory());
         for (Transaction transaction : transactions) {
             if (transactionTitle.equals(transaction.getTitle())) {
                 currentTransaction = transaction;
@@ -123,7 +125,8 @@ public class ScenaOgolnaController implements Initializable {
     private void changedCreditor(ObservableValue<? extends String> observableValue, String s, String t1) {
         String selectedCreditorName = newTransactionCreditor.getSelectionModel().getSelectedItem();
 
-        ArrayList<Member> members = holder.getMembers();
+        ArrayList<Member> members = new ArrayList<>();
+        members.addAll(holder.getMembers());
         members.addAll(bill.getMembers());
         for (Member member : members) {
             if (Objects.equals(member.getName(), selectedCreditorName)) {
@@ -136,7 +139,8 @@ public class ScenaOgolnaController implements Initializable {
     private void changedDebtors(ObservableValue<? extends String> observableValue, String s, String t1) {
         ObservableList<String> selectedDebtorsNames = newTransactionDebtors.getSelectionModel().getSelectedItems();
 
-        ArrayList<Member> members = holder.getMembers();
+        ArrayList<Member> members = new ArrayList<>();
+        members.addAll(holder.getMembers());
         members.addAll(bill.getMembers());
         for (Member member: members) {
             for(String debtorName : selectedDebtorsNames) {
@@ -220,7 +224,6 @@ public class ScenaOgolnaController implements Initializable {
         int size = bill.getTransactionHistory().size();
         transactionHistory.getItems().add(bill.getTransactionHistory().get(size - 1).getTitle());
 
-        System.out.println(transactionHistory.toString());
     }
 
 }

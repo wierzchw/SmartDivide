@@ -14,7 +14,6 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 public class App extends Application {
 
@@ -28,13 +27,10 @@ public class App extends Application {
         StartupSceneController startupSceneController;
 
         if (Files.exists(path)) {
-            System.out.println("plik istnieje");
             reader = new Serialize("savefile.txt");
             holder = new Holder(reader.getBills(), reader.getMembers());
-            System.out.println("dane zczytane");
 
         } else {
-            System.out.println("plik nie istnieje");
             holder = new Holder();
 
         }
@@ -57,7 +53,6 @@ public class App extends Application {
                 try {
                     saveFile.createNewFile();
                     writer.saveState(saveFile.getAbsolutePath());
-                    System.out.println("dane zapisane");
                     Platform.exit();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
