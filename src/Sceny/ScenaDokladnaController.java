@@ -165,7 +165,6 @@ public class ScenaDokladnaController implements Initializable {
         System.out.println("selected saved member:" + selectedSavedMember);
     }
 
-
     @FXML
     void addMember(ActionEvent event) {
         Member newMember = new Member(addMemberTextField.getText());
@@ -257,6 +256,7 @@ public class ScenaDokladnaController implements Initializable {
         billName.setText(bill.getTitle());
     }
 
+    @FXML
     public void changeMemberName() {
         String newName = changeMemberNameTextField.getText();
         if(!holder.checkMemberExistence(newName)) {

@@ -8,7 +8,6 @@ import java.util.Objects;
 
 public class Holder  {
 
-    private Holder holder;
 
     private ArrayList<Bill> bills;
     private ArrayList<Member> members;
@@ -16,14 +15,6 @@ public class Holder  {
     public Holder() {
         bills = new ArrayList<Bill>();
         members = new ArrayList<Member>();
-
-        Member member1 = new Member("Adaś");
-        Member member2 = new Member("Krzyś");
-        bills.add(new Bill("bill1"));
-        bills.add(new Bill("bill2"));
-        bills.get(0).addMember(member1);
-        bills.get(0).addMember(member2);
-        bills.get(0).addDebtForTime("Operacja1", BigDecimal.valueOf(20), member1, member2, LocalDateTime.now());
     }
 
     public Holder(List<Bill> bills, List<Member> members) {

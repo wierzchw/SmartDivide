@@ -221,15 +221,15 @@ public class ScenaOgolnaController implements Initializable {
         Member creditor = selectedTransactionCreditor;
 
         int size = bill.getTransactionHistory().size();
-        if (selectedTransactionDebtors.size() > 1) {
-            bill.addGroupDebt(title, BigDecimal.valueOf(value), creditor, debtors);
-            for (int i = 0; i<selectedTransactionDebtors.size(); i++) {
-                transactionHistory.getItems().add(bill.getTransactionHistory().get(size - 1 - i).getTitle());
-            }
-        } else {
-            bill.addDebtForTime(title, BigDecimal.valueOf(value), debtors[0], creditor, LocalDateTime.now());
-            transactionHistory.getItems().add(bill.getTransactionHistory().get(size - 1).getTitle());
-        }
+//        if (selectedTransactionDebtors.size() > 1) {
+//            bill.addGroupDebt(title, BigDecimal.valueOf(value), creditor, debtors);
+//            for (int i = 0; i<selectedTransactionDebtors.size(); i++) {
+//                transactionHistory.getItems().add(bill.getTransactionHistory().get(size - 1 - i).getTitle());
+//            }
+//        } else {
+            bill.addDebt(title, BigDecimal.valueOf(value), debtors[debtors.length - 1], creditor);
+            transactionHistory.getItems().add(bill.getTransactionHistory().get(size).getTitle());
+//        }
 
 
 
