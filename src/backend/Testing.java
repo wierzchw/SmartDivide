@@ -61,7 +61,6 @@ public class Testing {
         System.out.println(mat);
 
         //neg/pos lists - OK
-        mat.createPosNegLists();
         System.out.println(mat);
 
 //        list of operations - OK

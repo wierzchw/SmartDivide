@@ -13,7 +13,7 @@ public class Bill {
     private String title;
     private int V = 0;
 
-    //adjacency matrix keeping track of debts
+    //map keeping track of debts
     private Map<Member, BigDecimal> debtList = new HashMap<>();
 
     private List<Member> members = new ArrayList<>();
@@ -43,7 +43,7 @@ public class Bill {
         debtList.replace(creditor, creditorDebt.add(amount));
         transactionHistory.add(new Transaction(amount, debtor, creditor, LocalDateTime.now(), debtTitle));
     }
-    public void addDebtForTime(String debtTitle, BigDecimal amount, Member debtor, Member creditor, LocalDateTime time) {
+    private void addDebtForTime(String debtTitle, BigDecimal amount, Member debtor, Member creditor, LocalDateTime time) {
         BigDecimal debtorDebt = debtList.get(debtor);
         BigDecimal creditorDebt = debtList.get(creditor);
         debtList.replace(debtor, debtorDebt. subtract(amount));
@@ -57,7 +57,7 @@ public class Bill {
     //creates 2 maps:
 // members in debt with absolute value of debt (negatives)
 // members that are creditors with amount they lent
-    public void createPosNegLists(){
+    private void createPosNegMaps(){
         negatives = new HashMap<>();
         positives = new HashMap<>();
         for (Member member: debtList.keySet().stream().toList()) {
@@ -76,20 +76,21 @@ public class Bill {
 // key: Member[] - [debtor, creditor]
 // val: double - amount
     public void minTransfers() {
-        createPosNegLists();
-        ReturnTypeForDfs result = dfs(negatives, positives);
+        createPosNegMaps();
+        ReturnTypeForSolveBill result = solveBill(negatives, positives);
         solution = result.transactions;
     }
 
     public void removeMember(Member selectedMember) {
         members.remove(selectedMember);
+        debtList.remove(selectedMember);
     }
 
-    private class ReturnTypeForDfs{
+    private class ReturnTypeForSolveBill{
         public int count;
         public Map<Member[], BigDecimal> transactions;
 
-        public ReturnTypeForDfs(int count, Map<Member[], BigDecimal> transactions) {
+        public ReturnTypeForSolveBill(int count, Map<Member[], BigDecimal> transactions) {
             this.count = count;
             this.transactions = transactions;
         }
@@ -99,8 +100,8 @@ public class Bill {
     // main algorithm, returns ReturnTypeForDfs with:
     //count - minimal number of transactions to settle debt
     //transactions - HashMap of transactions needed to settle debt in count transactions
-    private ReturnTypeForDfs dfs(Map<Member, BigDecimal> negatives, Map<Member, BigDecimal> positives) {
-        if (negatives.size() + positives.size() == 0) return new ReturnTypeForDfs(0, new HashMap<>());
+    private ReturnTypeForSolveBill solveBill(Map<Member, BigDecimal> negatives, Map<Member, BigDecimal> positives) {
+        if (negatives.size() + positives.size() == 0) return new ReturnTypeForSolveBill(0, new HashMap<>());
         Member neg = (Member) negatives.keySet().stream().toArray()[0];
         int count = Integer.MAX_VALUE;
         Map<Member[], BigDecimal> transactions = new HashMap<>();
@@ -126,7 +127,7 @@ public class Bill {
             } else if (difference.compareTo(BigDecimal.valueOf(0)) < 0) {
                 newPositives.put(pos, difference.negate());
             }
-            ReturnTypeForDfs ret = dfs(newNegatives, newPositives);
+            ReturnTypeForSolveBill ret = solveBill(newNegatives, newPositives);
             if(ret.count < count){
                 count = ret.count;
                 ret.transactions.put(fromTo, transferred.abs());
@@ -138,7 +139,7 @@ public class Bill {
 
         }
 
-        return new ReturnTypeForDfs(count + 1, transactions);
+        return new ReturnTypeForSolveBill(count + 1, transactions);
     }
 
 
