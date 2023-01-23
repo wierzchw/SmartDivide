@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -34,7 +35,7 @@ public class ScenaDokladnaController implements Initializable {
     @FXML
     private Label billName;
     @FXML
-    private ListView<?> debtsListView;
+    private ListView<String> debtsListView;
     @FXML
     private Button deleteDebtButton;
     @FXML
@@ -66,28 +67,48 @@ public class ScenaDokladnaController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // sekcja zapisanych osób
         ArrayList<Member> savedMembers = holder.getMembers();
         for (Member savedMember : savedMembers) {
             savedMemebersListView.getItems().add(savedMember.getName());
         }
+        savedMemebersListView.getSelectionModel().selectedItemProperty().addListener(this::changedSavedMember);
 
+        // sekcja osob w rachunku
         ArrayList<Member> members = (ArrayList<Member>) bill.getMembers();
         for (Member member : members) {
             membersListView.getItems().add(member.getName());
         }
-
-        savedMemebersListView.getSelectionModel().selectedItemProperty().addListener(this::changedSavedMember);
         membersListView.getSelectionModel().selectedItemProperty().addListener(this::changedMember);
+
+
+
     }
+
+
 
     private void changedMember(Observable observable) {
         String selectedMemberName = membersListView.getSelectionModel().getSelectedItem();
 
         ArrayList<Member> members = holder.getMembers();
+        members.addAll(bill.getMembers());
         for (Member member : members)
             if (Objects.equals(member.getName(), selectedMemberName)) {
                 selectedMember = member;
             }
+        updateDebtList();
+        members.clear();
+    }
+
+    private void updateDebtList() {
+        debtsListView.getItems().clear();
+
+        Map<Member[], Double> result = bill.minTransfers();
+        for (Member[] members : result.keySet().stream().toList()){
+            if (members[0].getName().equals(selectedMember.getName())) {
+                debtsListView.getItems().add(result.get(members) + " => " + members[1].getName());
+            }
+        }
     }
 
     private void changedSavedMember(Observable observable) {

@@ -3,6 +3,8 @@ package Sceny;
 import backend.Bill;
 import backend.Holder;
 import backend.Member;
+import backend.Transaction;
+import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -35,19 +37,28 @@ public class ScenaOgolnaController implements Initializable {
     private Button closeBllButton;
     @FXML
     private ChoiceBox<String> newTransactionCreditor;
-
     @FXML
     private ListView<String> newTransactionDebtors;
     @FXML
     private Button addTransactionButton;
-
     @FXML
     private TextField newTransactionTItle;
     @FXML
     private TextField newTransactionValue;
     @FXML
     private Button openMembersViewButton;
-
+    @FXML
+    private Label transactionCreditor;
+    @FXML
+    private Label transactionDebtor;
+    @FXML
+    private Label transactionName;
+    @FXML
+    private Label transactionValue;
+    @FXML
+    private Label transactionTime;
+    @FXML
+    private ListView<String> transactionHistory;
 
     Bill bill;
     Holder holder;
@@ -56,6 +67,7 @@ public class ScenaOgolnaController implements Initializable {
     private Parent root;
     private ArrayList<Member> selectedTransactionDebtors;
     private Member selectedTransactionCreditor;
+    private Transaction currentTransaction;
 
     public ScenaOgolnaController(Holder holder, Bill selectedBill) {
         this.holder = holder;
@@ -64,42 +76,78 @@ public class ScenaOgolnaController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // new transaction section
         ArrayList<Member> members = (ArrayList<Member>) bill.getMembers();
         for (Member member : members) {
             newTransactionDebtors.getItems().add(member.getName());
             newTransactionCreditor.getItems().add(member.getName());
         }
 
-        selectedTransactionDebtors = new ArrayList<>();
         newTransactionDebtors.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         newTransactionDebtors.getSelectionModel().selectedItemProperty().addListener(this::changedDebtors);
 
         newTransactionCreditor.getSelectionModel().selectedItemProperty().addListener(this::changedCreditor);
+
+        // transaction section
+        ArrayList<Transaction> transactions = (ArrayList<Transaction>) bill.getTransactionHistory();
+        for (Transaction transaction : transactions) {
+            transactionHistory.getItems().add(transaction.getTitle());
+        }
+
+        transactionHistory.getSelectionModel().selectedItemProperty().addListener(this::changedTransaction);
+
+        // selected transaction section
+    }
+
+    private void changedTransaction(Observable observable) {
+        String transactionTitle = transactionHistory.getSelectionModel().getSelectedItem();
+
+        ArrayList<Transaction> transactions = (ArrayList<Transaction>) bill.getTransactionHistory();
+        for (Transaction transaction : transactions) {
+            if (transactionTitle.equals(transaction.getTitle())) {
+                currentTransaction = transaction;
+            }
+        }
+        displayTransactionDetails();
+    }
+
+    private void displayTransactionDetails() {
+        transactionName.setText(currentTransaction.getTitle());
+        transactionCreditor.setText(currentTransaction.getCreditor().getName());
+        transactionDebtor.setText(currentTransaction.getDebtor().getName());
+        transactionValue.setText(String.valueOf(currentTransaction.getAmount()));
+        transactionTime.setText(currentTransaction.getTime().toLocalDate().toString());
     }
 
     private void changedCreditor(ObservableValue<? extends String> observableValue, String s, String t1) {
         String selectedCreditorName = newTransactionCreditor.getSelectionModel().getSelectedItem();
 
         ArrayList<Member> members = holder.getMembers();
-        for (Member member : members)
-                if (Objects.equals(member.getName(), selectedCreditorName)) {
-                    selectedTransactionCreditor = member;
-                }
+        members.addAll(bill.getMembers());
+        for (Member member : members) {
+            if (Objects.equals(member.getName(), selectedCreditorName)) {
+                selectedTransactionCreditor = member;
+            }
+        }
+        members.clear();
     }
 
     private void changedDebtors(ObservableValue<? extends String> observableValue, String s, String t1) {
         ObservableList<String> selectedDebtorsNames = newTransactionDebtors.getSelectionModel().getSelectedItems();
 
-        selectedTransactionDebtors.clear();
         ArrayList<Member> members = holder.getMembers();
+        members.addAll(bill.getMembers());
         for (Member member: members) {
             for(String debtorName : selectedDebtorsNames) {
                 if (Objects.equals(member.getName(), debtorName)) {
+                    if (selectedTransactionDebtors == null) {
+                        selectedTransactionDebtors = new ArrayList<Member>();
+                    }
                     selectedTransactionDebtors.add(member);
                 }
             }
         }
-        System.out.println(selectedTransactionDebtors);
+        members.clear();
     }
 
     public void closeBill(ActionEvent event) throws IOException {
@@ -146,28 +194,32 @@ public class ScenaOgolnaController implements Initializable {
     }
 
     public void controllerAddDebt() {
-        if (selectedTransactionDebtors.isEmpty() || newTransactionCreditor == null || newTransactionValue.getText().isEmpty() ||  newTransactionTItle.getText().isEmpty()) {
+        if (selectedTransactionDebtors.isEmpty() ||
+                newTransactionCreditor == null ||
+                newTransactionValue.getText().isEmpty() ||
+                newTransactionTItle.getText().isEmpty()) {
             return;
         }
 
-        Member[] debtors = new Member[selectedTransactionDebtors.size()];
-        debtors = selectedTransactionDebtors.toArray(debtors);
-        System.out.println(Arrays.toString(debtors));
+        String title = newTransactionTItle.getText();
 
         Double value = Double.valueOf(newTransactionValue.getText());
-        System.out.println(value);
 
-        String title = newTransactionTItle.getText();
-        System.out.println(title);
+        Member[] debtors = new Member[selectedTransactionDebtors.size()];
+        debtors = selectedTransactionDebtors.toArray(debtors);
 
         Member creditor = selectedTransactionCreditor;
-        System.out.println(creditor);
 
         if (selectedTransactionDebtors.size() > 1) {
-            bill.addGroupDebt(value, creditor, debtors);
+            bill.addGroupDebt(title, value, creditor, debtors);
         } else {
-            bill.addDebtForTime(value, debtors[0], creditor, LocalDateTime.now());
+            bill.addDebtForTime(title, value, debtors[0], creditor, LocalDateTime.now());
         }
+
+        int size = bill.getTransactionHistory().size();
+        transactionHistory.getItems().add(bill.getTransactionHistory().get(size - 1).getTitle());
+
+        System.out.println(transactionHistory.toString());
     }
 
 }

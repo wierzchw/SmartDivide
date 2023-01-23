@@ -1,5 +1,6 @@
 package backend;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -14,10 +15,13 @@ public class Holder {
         bills = new ArrayList<Bill>();
         members = new ArrayList<Member>();
 
-        members.add(new Member("Adaś"));
-        members.add(new Member("Krzyś"));
+        Member member1 = new Member("Adaś");
+        Member member2 = new Member("Krzyś");
         bills.add(new Bill("bill1"));
         bills.add(new Bill("bill2"));
+        bills.get(0).addMember(member1);
+        bills.get(0).addMember(member2);
+        bills.get(0).addDebtForTime("Operacja1",20, member1, member2, LocalDateTime.now());
     }
 
     public boolean checkBillExistence(String newBillTitle) {
