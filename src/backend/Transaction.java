@@ -1,9 +1,10 @@
 package backend;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class Transaction{
+public class Transaction implements Serializable {
     private BigDecimal amount;
     private Member debtor;
     private Member creditor;
