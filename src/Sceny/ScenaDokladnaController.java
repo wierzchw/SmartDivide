@@ -105,6 +105,7 @@ public class ScenaDokladnaController implements Initializable {
 
         Map<Member[], BigDecimal> result = bill.getSolution();
         for (Member[] members : result.keySet().stream().toList()){
+            if (selectedDebtName == null) {break;}
             String checkedName = result.get(members) + " => " + members[1].getName();
             if (selectedDebtName.equals(checkedName)) {
                 selectedDebt = members;

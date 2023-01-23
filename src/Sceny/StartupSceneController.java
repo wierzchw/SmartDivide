@@ -2,6 +2,7 @@ package Sceny;
 
 import backend.Bill;
 import backend.Holder;
+import backend.Member;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -44,6 +46,8 @@ public class StartupSceneController implements Initializable {
     private Parent root;
 
     private Bill selectedBill;
+    private ArrayList<Bill> selectedBills;
+
 
     public StartupSceneController(Holder holder) {
         this.holder = holder;
@@ -61,19 +65,27 @@ public class StartupSceneController implements Initializable {
             listView.getItems().add(bill.getTitle());
         }
 
+        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 String selectedBillName = listView.getSelectionModel().getSelectedItem();
                 for (Bill bill : bills) {
                     if(Objects.equals(bill.getTitle(), selectedBillName)){
+                        if (selectedBills == null) {
+                            selectedBills = new ArrayList<Bill>();
+                        }
+                        selectedBills.add(bill);
                         selectedBill = bill;
-                        break;
                     }
                 }
 
                 //TESTY
-                System.out.println("selected bill:" + selectedBill);
+                System.out.println("selected bill:" + selectedBill.getTitle());
+                if(selectedBills.size() >= 2) {
+                    System.out.println("last selected bill:" + selectedBills.get(selectedBills.size() - 2).getTitle());
+                }
+                System.out.println("selected bills size:" + selectedBills.size());
             }
         });
 
@@ -126,6 +138,15 @@ public class StartupSceneController implements Initializable {
 
     public void setHolder(Holder holder) {
         this.holder = holder;
+    }
+
+    public void mergeSelectedBills() {
+        if (selectedBills.size() < 2) {return;}
+        Bill secondBill = selectedBills.get(selectedBills.size()-2);
+        selectedBill.mergeBills(secondBill);
+
+        holder.getBills().remove(secondBill);
+        listView.getItems().remove(secondBill.getTitle());
     }
 
 }

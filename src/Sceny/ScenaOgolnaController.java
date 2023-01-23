@@ -148,11 +148,16 @@ public class ScenaOgolnaController implements Initializable {
                     if (selectedTransactionDebtors == null) {
                         selectedTransactionDebtors = new ArrayList<Member>();
                     }
-                    selectedTransactionDebtors.add(member);
+                    if (!selectedTransactionDebtors.contains(member)) {
+                        selectedTransactionDebtors.add(member);
+                    }
                 }
             }
         }
         members.clear();
+
+        //TEST
+        System.out.println("selected Debtors:" + selectedTransactionDebtors);
     }
 
     public void closeBill(ActionEvent event) throws IOException {
@@ -215,14 +220,19 @@ public class ScenaOgolnaController implements Initializable {
 
         Member creditor = selectedTransactionCreditor;
 
+        int size = bill.getTransactionHistory().size();
         if (selectedTransactionDebtors.size() > 1) {
             bill.addGroupDebt(title, BigDecimal.valueOf(value), creditor, debtors);
+            for (int i = 0; i<selectedTransactionDebtors.size(); i++) {
+                transactionHistory.getItems().add(bill.getTransactionHistory().get(size - 1 - i).getTitle());
+            }
         } else {
             bill.addDebtForTime(title, BigDecimal.valueOf(value), debtors[0], creditor, LocalDateTime.now());
+            transactionHistory.getItems().add(bill.getTransactionHistory().get(size - 1).getTitle());
         }
 
-        int size = bill.getTransactionHistory().size();
-        transactionHistory.getItems().add(bill.getTransactionHistory().get(size - 1).getTitle());
+
+
 
     }
 

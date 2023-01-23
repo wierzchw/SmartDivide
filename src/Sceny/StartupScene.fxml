@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" >
+<AnchorPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label layoutX="100.0" layoutY="100.0" text="SmartDivide">
          <font>
@@ -42,6 +42,11 @@
          </font>
       </Button>
       <Button fx:id="deleteBillButton" layoutX="95.0" layoutY="495.0" mnemonicParsing="false" onAction="#controllerDeleteBill" prefHeight="31.0" prefWidth="133.0" text="Usuń rachunek">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <Button fx:id="mergeBillsButton" layoutX="243.0" layoutY="454.0" mnemonicParsing="false" onAction="#mergeSelectedBills" text="Połącz rachunki">
          <font>
             <Font size="15.0" />
          </font>
