@@ -1,10 +1,11 @@
 package backend;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Holder {
+public class Holder  {
 
     private Holder holder;
 
@@ -21,7 +22,7 @@ public class Holder {
         bills.add(new Bill("bill2"));
         bills.get(0).addMember(member1);
         bills.get(0).addMember(member2);
-        bills.get(0).addDebtForTime("Operacja1",20, member1, member2, LocalDateTime.now());
+        bills.get(0).addDebtForTime("Operacja1", BigDecimal.valueOf(20), member1, member2, LocalDateTime.now());
     }
 
     public boolean checkBillExistence(String newBillTitle) {

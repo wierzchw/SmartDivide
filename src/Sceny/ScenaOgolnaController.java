@@ -18,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -211,9 +212,9 @@ public class ScenaOgolnaController implements Initializable {
         Member creditor = selectedTransactionCreditor;
 
         if (selectedTransactionDebtors.size() > 1) {
-            bill.addGroupDebt(title, value, creditor, debtors);
+            bill.addGroupDebt(title, BigDecimal.valueOf(value), creditor, debtors);
         } else {
-            bill.addDebtForTime(title, value, debtors[0], creditor, LocalDateTime.now());
+            bill.addDebtForTime(title, BigDecimal.valueOf(value), debtors[0], creditor, LocalDateTime.now());
         }
 
         int size = bill.getTransactionHistory().size();

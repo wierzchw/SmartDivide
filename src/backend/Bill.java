@@ -22,6 +22,8 @@ public class Bill {
     private List<Transaction> transactionHistory = new ArrayList<>();
     private Map<Member[], BigDecimal> solution;
 
+    private static int refoundCounter = 1;
+
     public Bill(String title) {
         this.title = title;
     }
@@ -77,6 +79,10 @@ public class Bill {
         createPosNegLists();
         ReturnTypeForDfs result = dfs(negatives, positives);
         solution = result.transactions;
+    }
+
+    public void removeMember(Member selectedMember) {
+        members.remove(selectedMember);
     }
 
     private class ReturnTypeForDfs{
@@ -189,7 +195,8 @@ public class Bill {
         for (Member[] dc: solution.keySet().stream().toList()) {
             if (dc[0]==input[0] && dc[1] == input[1]){
                 amount = solution.remove(dc);
-                addDebt("zwrot", amount, creditor, debtor);
+                addDebt("zwrot" + refoundCounter, amount, creditor, debtor);
+                refoundCounter+=1;
                 return;
             }
         }
@@ -202,6 +209,10 @@ public class Bill {
 
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String newTitle) {
+        title = newTitle;
     }
 
     public Map<Member, BigDecimal> getDebtList() {

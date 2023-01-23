@@ -40,11 +40,11 @@
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
                                     <ListView fx:id="debtsListView" layoutX="20.0" layoutY="180.0" prefHeight="372.0" prefWidth="285.0" />
-                                    <Label alignment="CENTER" layoutX="2.0" layoutY="14.0" prefHeight="28.0" prefWidth="322.0" text="Imię osoby">
+                                    <Label fx:id="selectedMemberName" alignment="CENTER" layoutX="2.0" layoutY="14.0" prefHeight="28.0" prefWidth="322.0" text="Imię osoby">
                                        <font>
                                           <Font size="19.0" />
                                        </font></Label>
-                                    <Label alignment="CENTER" layoutY="80.0" prefHeight="28.0" prefWidth="322.0" text="Bilans">
+                                    <Label fx:id="selectedMemberBilans" alignment="CENTER" layoutY="80.0" prefHeight="28.0" prefWidth="322.0" text="Bilans">
                                        <font>
                                           <Font size="19.0" />
                                        </font>

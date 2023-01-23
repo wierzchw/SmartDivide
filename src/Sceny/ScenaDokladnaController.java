@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
@@ -51,6 +52,12 @@ public class ScenaDokladnaController implements Initializable {
     private ListView<String> savedMemebersListView;
     @FXML
     private Button switchToScenaOgolnaButton;
+    @FXML
+    private Label selectedMemberBilans;
+    @FXML
+    private Label selectedMemberName;
+
+
     private Member selectedSavedMember;
     private Member selectedMember;
 
@@ -59,6 +66,7 @@ public class ScenaDokladnaController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Parent root;
+    private Member[] selectedDebt;
 
     public ScenaDokladnaController(Bill bill, Holder holder)  {
         this.bill = bill;
@@ -81,10 +89,22 @@ public class ScenaDokladnaController implements Initializable {
         }
         membersListView.getSelectionModel().selectedItemProperty().addListener(this::changedMember);
 
-
+        // sekcja długów osoby
+        debtsListView.getSelectionModel().selectedItemProperty().addListener(this::changedDebt);
 
     }
 
+    private void changedDebt(Observable observable) {
+        String selectedDebtName = debtsListView.getSelectionModel().getSelectedItem();
+
+        Map<Member[], BigDecimal> result = bill.getSolution();
+        for (Member[] members : result.keySet().stream().toList()){
+            String checkedName = result.get(members) + " => " + members[1].getName();
+            if (selectedDebtName.equals(checkedName)) {
+                selectedDebt = members;
+            }
+        }
+    }
 
 
     private void changedMember(Observable observable) {
@@ -101,9 +121,13 @@ public class ScenaDokladnaController implements Initializable {
     }
 
     private void updateDebtList() {
-        debtsListView.getItems().clear();
+        selectedMemberName.setText(selectedMember.getName());
+        selectedMemberBilans.setText(String.valueOf(bill.getDebtList().get(selectedMember)));
 
-        Map<Member[], Double> result = bill.minTransfers();
+        debtsListView.getItems().clear();
+        bill.minTransfers();
+
+        Map<Member[], BigDecimal> result = bill.getSolution();
         for (Member[] members : result.keySet().stream().toList()){
             if (members[0].getName().equals(selectedMember.getName())) {
                 debtsListView.getItems().add(result.get(members) + " => " + members[1].getName());
@@ -137,12 +161,13 @@ public class ScenaDokladnaController implements Initializable {
 
     @FXML
     void deleteDebt(ActionEvent event) {
-
+        bill.settleDebtFromSolution(selectedDebt[0], selectedDebt[1]);
+        updateDebtList();
     }
 
     @FXML
     void deleteMember(ActionEvent event) {
-        if (selectedMember == null || bill.getDebtList().get(selectedMember) != 0) {
+        if (selectedMember == null || bill.getDebtList().get(selectedMember).equals(BigDecimal.valueOf(0))) {
             return;
         }
         membersListView.getItems().remove(selectedMember.getName());
